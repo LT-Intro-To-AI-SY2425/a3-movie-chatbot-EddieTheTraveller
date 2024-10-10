@@ -245,6 +245,23 @@ def title_by_actor(matches: List[str]) -> List[str]:
 
     pass
 
+def space(word_list):
+    spaced_words = []
+    for word in word_list:
+        if len(word) > 1:
+            spaced_word = " ".join(list(word))
+            spaced_words.append(spaced_word)
+        else:
+            spaced_words.append(word)
+    return spaced_words
+
+def search_pa_list(words):
+    return space(words)
+
+def print_spaced_words(words):
+    spaced_words = search_pa_list(words)
+    for word in spaced_words:
+        print(word)
 
 # dummy argument is ignored and doesn't matter
 def bye_action(dummy: List[str]) -> None:
@@ -266,6 +283,7 @@ pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
     (str.split("who acted in %"), actors_by_title),
     (str.split("when was % made"), year_by_title),
     (str.split("in what movies did % appear"), title_by_actor),
+    (str.split("what is % spaced out"), space),
     (["bye"], bye_action),
 ]
 
@@ -365,6 +383,23 @@ if __name__ == "__main__":
         ["citizen kane", "othello"]
     ), "failed title_by_actor test"
     
+    assert sorted(search_pa_list(["what", "is", "LOL", "spaced", "out"])) == sorted(["L O L"]), "Spaced Failed"
+    words = ["what", "is", "LOL", "spaced", "out"]
+    print_spaced_words(words)
+
+    assert sorted(search_pa_list(["what", "is", "Dog", "spaced", "out"])) == sorted(["D o g"]), "Spaced Failed"
+    words = ["what", "is", "Dog", "spaced", "out"]
+    print_spaced_words(words)
+
+    assert sorted(search_pa_list(["what", "is", "Chicken", "spaced", "out"])) == sorted(["C h i c k e n"]), "Spaced Failed"
+    words = ["what", "is", "Chicken", "spaced", "out"]
+    print_spaced_words(words)
+    
+    assert sorted(search_pa_list(["what", "is", "Do", "spaced", "out"])) == sorted(["D o"]), "Spaced Failed"
+    words = ["what", "is", "Do", "spaced", "out"]
+    print_spaced_words(words)
+
+
     assert sorted(search_pa_list(["hi", "there"])) == sorted(
         ["I don't understand"]
     ), "failed search_pa_list test 1"
